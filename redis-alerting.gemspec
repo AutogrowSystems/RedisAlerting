@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Redis::Alerting::VERSION
   spec.authors       = ["Robert McLeod"]
   spec.email         = ["robert@autogrow.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{Checks redis for alert conditions}
+  spec.description   = %q{Checks redis for alert conditions and adds keys to a set when a value is round to be out of range}
   spec.homepage      = ""
   spec.license       = "MIT"
 
