@@ -8,5 +8,4 @@ opts = Slop.parse do
   on :d, :daemonize, "Daemonize"
 end
 
-engine = Redis::Alerting::Engine.new(opts)
-engine.run
+Redis::Alerting.run(opts)
