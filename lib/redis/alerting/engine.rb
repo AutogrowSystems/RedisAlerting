@@ -5,7 +5,6 @@ module Redis
         @config = config
         @redis = redis
         check_redis
-        parse_config
       end
 
       def run
@@ -40,17 +39,6 @@ module Redis
       def check_redis
         raise ArgumentError, "Invalid Redis instance given" unless @redis.is_a? Redis
         raise ArgumentError, "Could not connect to Redis" unless @redis.ping == "PONG"
-      end
-
-      def parse_config
-        raise ArgumentError, "Invalid config file: #{config[:config]}" unless File.exists? @config[:config]
-        @config.merge(YAML.load_file(@config[:config])["alerting"])
-        raise ArgumentError, "Incomplete configuration" unless valid_config?
-      end
-
-      # TODO: check we have all the needed options
-      def valid_config?
-        true
       end
     end
   end

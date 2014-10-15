@@ -1,8 +1,8 @@
 ---
 alerting:
-  interval: 1
-  namespace: alerts
-  sources:
-    ph: readings.ph
-    ec: readings.ec
-    flow: readings.flow
+  :interval: 1
+  :namespace: alerts
+  :sources:
+    :ph: readings.ph
+    :ec: readings.ec
+    :flow: readings.flow
