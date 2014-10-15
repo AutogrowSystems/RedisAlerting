@@ -1,5 +1,6 @@
 ---
 alerting:
+  interval: 1
   namespace: alerts
   sources:
     ph: readings.ph
