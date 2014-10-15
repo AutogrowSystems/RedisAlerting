@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require 'redis/alerting'
+require 'slop'
+
+opts = Slop.parse do
+  on :c, :config=, 'Configuration File'
+  on :d, :daemonize, "Daemonize"
+end
+
+engine = Redis::Alerting::Engine.new(opts)
+engine.run
