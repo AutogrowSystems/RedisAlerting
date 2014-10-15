@@ -8,25 +8,21 @@ module Redis
       end
 
       def run
-        loop do
-          ns = @config[:namespace]
-          @config[:sources].each do |key, source|
+        ns = @config[:namespace]
+        @config[:sources].each do |key, source|
 
-            # get the readings and alert ranges
-            min = @redis.get "#{ns}.#{key}.min"
-            max = @redis.get "#{ns}.#{key}.max"
-            reading = @redis.get source
+          # get the readings and alert ranges
+          min = @redis.get "#{ns}.#{key}.min"
+          max = @redis.get "#{ns}.#{key}.max"
+          reading = @redis.get source
 
-            # check for alert conditions
-            add_alert_for key and next if reading < min
-            add_alert_for key and next if reading > max
+          # check for alert conditions
+          add_alert_for key and next if reading < min
+          add_alert_for key and next if reading > max
 
-            # if we got to here the alert conditions are not present anymore
-            # so we should remove the alert if it exists
-            remove_if_alert_exists key
-          end
-
-          sleep @config[:interval]
+          # if we got to here the alert conditions are not present anymore
+          # so we should remove the alert if it exists
+          remove_if_alert_exists key
         end
       end
 
