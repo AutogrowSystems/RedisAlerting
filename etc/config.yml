@@ -1,0 +1,7 @@
+---
+alerting:
+  namespace: alerts
+  sources:
+    ph: readings.ph
+    ec: readings.ec
+    flow: readings.flow
