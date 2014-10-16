@@ -1,4 +1,5 @@
 require 'redis'
+require 'pry'
 require 'redis_alerting'
 
 def test_config
