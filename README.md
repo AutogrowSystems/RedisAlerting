@@ -1,13 +1,13 @@
-# Redis::Alerting
+# RedisAlerting
 
-A tool that uses keys from redis to determine if a reading is out of range.  It then writes to a key in redis to indicate that the reading is out of range.
+An alerting engine that uses keys from redis to determine if a reading is out of range.  It then writes to a key in redis to indicate that the reading is out of range.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'redis-alerting'
+gem 'redis_alerting'
 ```
 
 And then execute:
@@ -16,7 +16,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install redis-alerting
+    $ gem install redis_alerting
 
 ## Usage
 
