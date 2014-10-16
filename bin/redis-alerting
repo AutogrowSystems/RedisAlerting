@@ -1,11 +1,26 @@
 #!/usr/bin/env ruby
 
-require 'redis/alerting'
+require 'redis_alerting'
 require 'slop'
+require 'daemons'
 
-opts = Slop.parse do
-  on :c, :config=, 'Configuration File'
-  on :d, :daemonize, "Daemonize"
+daemon_opts = {
+  monitor: true,
+  multiple: false,
+  log_output: true,
+  log_dir: "/tmp"
+}
 end
 
-Redis::Alerting.run(opts)
+Daemons.run_proc("redis_alerting", daemon_opts ) do
+  opts = Slop.parse slop_args do
+    on :c, :config=, 'Configuration File'
+    on :p, :pwd=, "Working directory"
+  end
+
+  begin
+    RedisAlerting.run(opts.to_hash)
+  rescue ArgumentError => e
+    abort "ERROR: #{e.message}"
+  end
+end
