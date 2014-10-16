@@ -15,6 +15,8 @@ module RedisAlerting
         max = @redis.get "#{ns}.#{key}.max"
         reading = @redis.get source
 
+        next if max.nil? or min.nil? or reading.nil?
+
         # check for alert conditions
         add_alert_for key and next if reading < min
         add_alert_for key and next if reading > max
