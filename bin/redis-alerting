@@ -10,6 +10,19 @@ daemon_opts = {
   log_output: true,
   log_dir: "/tmp"
 }
+
+slop_args = []
+
+# build the slop args custom because daemons gem overrides
+# ARGV and slop can't deal with it
+if ARGV.index("--")
+  slop_args = ARGV[(ARGV.index("--")+1)..-1]
+
+  # set the PWD
+  if slop_args.index("-p").nil?
+    slop_args << "-p"
+    slop_args << Dir.pwd
+  end
 end
 
 Daemons.run_proc("redis_alerting", daemon_opts ) do
