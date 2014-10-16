@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["robert@autogrow.com"]
   spec.summary       = %q{Checks redis for alert conditions}
   spec.description   = %q{Checks redis for alert conditions and adds keys to a set when a value is round to be out of range}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/AutogrowSystems/RedisAlerting"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
