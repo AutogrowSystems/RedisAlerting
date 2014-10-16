@@ -2,6 +2,7 @@ module RedisAlerting
   class Config
     def initialize(opts)
       @config = opts
+      parse_config
     end
 
     def to_hash
