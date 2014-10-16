@@ -1,1 +1,11 @@
-require 'redis/alerting'
+require 'redis'
+require 'redis_alerting'
+
+def test_config
+  {
+    namespace: "test.alerts",
+    sources: {
+      ph: "test.readings.ph"
+    }
+  }
+end

@@ -1,10 +1,10 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'redis/alerting/version'
+require 'redis_alerting/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "redis-alerting"
+  spec.name          = "redis_alerting"
   spec.version       = Redis::Alerting::VERSION
   spec.authors       = ["Robert McLeod"]
   spec.email         = ["robert@autogrow.com"]
