@@ -18,8 +18,15 @@ module RedisAlerting
         next if max.nil? or min.nil? or reading.nil?
 
         # check for alert conditions
-        add_alert_for key and next if reading < min
-        add_alert_for key and next if reading > max
+        if reading < min
+          add_alert_for(key)
+          next
+        end
+
+        if reading > max
+          add_alert_for(key)
+          next
+        end
 
         # if we got to here the alert conditions are not present anymore
         # so we should remove the alert if it exists
