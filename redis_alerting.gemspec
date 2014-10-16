@@ -5,7 +5,7 @@ require 'redis_alerting/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "redis_alerting"
-  spec.version       = Redis::Alerting::VERSION
+  spec.version       = RedisAlerting::VERSION
   spec.authors       = ["Robert McLeod"]
   spec.email         = ["robert@autogrow.com"]
   spec.summary       = %q{Checks redis for alert conditions}
