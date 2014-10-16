@@ -37,11 +37,12 @@ module RedisAlerting
     private
 
     def add_alert_for(key)
+      return if @redis.sismember(@config[:namespace], key)
       @redis.sadd @config[:namespace], key
     end
 
     def remove_if_alert_exists(key)
-      return unless @redis.sismember @config[:namespace], key
+      return unless @redis.sismember(@config[:namespace], key)
       @redis.srem @config[:namespace], key
     end
 
