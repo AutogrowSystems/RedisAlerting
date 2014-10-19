@@ -47,14 +47,14 @@ Given the config file below we will describe how the gem would check some limits
 ```yaml
 ---
 alerting:
-  interval: 1              # how often to check the readings
-  namespace: alerts        # where the min/max settings, and active alerts are located
-  channel: alerts          # publish alert messages to this channel
-  sources:                 # keys to obtain values from that need to be checked
-    ph: readings.ph
-    ec: readings.ec
-    flow: readings.flow
-#   name: redis.key.with.live.value
+  :interval: 1              # how often to check the readings
+  :namespace: alerts        # where the min/max settings, and active alerts are located
+  :channel: alerts          # publish alert messages to this channel
+  :sources:                 # keys to obtain values from that need to be checked
+    :ph: readings.ph
+    :ec: readings.ec
+    :flow: readings.flow
+#   :name: redis.key.with.live.value
 ```
 
 With the example of `ph` above, the alerting system would check the redis key `readings.ph` and determine if it was outside the limits set in `alerts.ph.max` and `alerts.ph.min`.
@@ -119,9 +119,13 @@ $ redis-cli
 (empty list or set)
 ```
 
+## Todo
+
+* more specs
+
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/redis-alerting/fork )
+1. Fork it ( https://github.com/AutogrowSystems/RedisAlerting/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
