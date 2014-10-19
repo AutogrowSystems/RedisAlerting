@@ -3,6 +3,7 @@ require "redis_alerting/engine"
 require "redis_alerting/config"
 require 'redis'
 require 'yaml'
+require 'json'
 
 module RedisAlerting
   class << self

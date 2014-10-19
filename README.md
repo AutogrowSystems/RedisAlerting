@@ -47,9 +47,10 @@ Given the config file below we will describe how the gem would check some limits
 ```yaml
 ---
 alerting:
-  interval: 1
-  namespace: alerts
-  sources:
+  interval: 1              # how often to check the readings
+  namespace: alerts        # where the min/max settings, and active alerts are located
+  channel: alerts          # publish alert messages to this channel
+  sources:                 # keys to obtain values from that need to be checked
     ph: readings.ph
     ec: readings.ec
     flow: readings.flow
@@ -58,6 +59,35 @@ alerting:
 With the example of `ph` above, the alerting system would check the redis key `readings.ph` and determine if it was outside the limits set in `alerts.ph.max` and `alerts.ph.min`.
 
 When it finds that the value in `readings.ph` is outside the range, it will add "ph" to the redis set `alerts`.  When it comes back into range "ph" will be removed from the `alerts` set.
+
+### Published messages
+
+When an alert condition is added or removed, the following message will be published the channel specified in the config file in JSON format:
+
+So when an alert is raised, this message will be published:
+
+```json
+{
+  "action"   : "add",
+  "name"     : "ec",
+  "condition": "high",
+  "value"    : 6.2,
+  "min"      : 0.1,
+  "max"      : 5.8
+}
+```
+
+When an alert is no longer active, this message will be published:
+
+```json
+{
+  "action" : "remove",
+  "name"   : "flow",
+  "value"  : 2.4,
+  "min"    : 0.1,
+  "max"    : 5.8
+}
+```
 
 ### Simple example
 

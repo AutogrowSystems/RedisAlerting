@@ -2,6 +2,7 @@
 alerting:
   :interval: 1
   :namespace: alerts
+  :channel: alerts
   :sources:
     :ph: readings.ph
     :ec: readings.ec
