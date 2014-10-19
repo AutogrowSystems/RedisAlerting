@@ -54,11 +54,19 @@ alerting:
     ph: readings.ph
     ec: readings.ec
     flow: readings.flow
+#   name: redis.key.with.live.value
 ```
 
 With the example of `ph` above, the alerting system would check the redis key `readings.ph` and determine if it was outside the limits set in `alerts.ph.max` and `alerts.ph.min`.
 
-When it finds that the value in `readings.ph` is outside the range, it will add "ph" to the redis set `alerts`.  When it comes back into range "ph" will be removed from the `alerts` set.
+When it finds that the value in `readings.ph` is outside the range, it will add "ph" to the redis set `alerts.active`.  When it comes back into range "ph" will be removed from the `alerts.active` set.
+
+So to quickly summarize:
+
+* `readings.ph` - the reading value used to check against the min and max settings
+* `alerts.ph.min` - the minimum value for the reading (below which an alert is raised)
+* `alerts.ph.max` - the maximum value for the reading (above which an alert is raised)
+* `alerts.active` - the Redis SET that contains the names of the active alerts (e.g. "ph", "ec" or "flow")
 
 ### Published messages
 
@@ -98,16 +106,16 @@ $ redis-cli
 127.0.0.1:6379> set alerts.ph.min 4000
 127.0.0.1:6379> set alerts.ph.max 9000
 127.0.0.1:6379> set readings.ph 6000
-127.0.0.1:6379> smembers alerts
+127.0.0.1:6379> smembers alerts.active
 (empty list or set)
 127.0.0.1:6379> set readings.ph 9100
-127.0.0.1:6379> smembers alerts
+127.0.0.1:6379> smembers alerts.active
 1) "ph"
 127.0.0.1:6379> set readings.ph 3900
-127.0.0.1:6379> smembers alerts
+127.0.0.1:6379> smembers alerts.active
 1) "ph"
 127.0.0.1:6379> set readings.ph 6000
-127.0.0.1:6379> smembers alerts
+127.0.0.1:6379> smembers alerts.active
 (empty list or set)
 ```
 

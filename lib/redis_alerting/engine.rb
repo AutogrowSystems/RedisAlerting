@@ -2,6 +2,7 @@ module RedisAlerting
   class Engine
     def initialize(config, redis)
       @config = config
+      @active_set = "#{@config[:namespace]}.active"
       @redis = redis
       check_redis
     end
@@ -39,8 +40,8 @@ module RedisAlerting
     end
 
     def add_alert_for(name, condition, value, min, max)
-      return if @redis.sismember(@config[:namespace], name)
-      @redis.sadd @config[:namespace], name
+      return if @redis.sismember(@active_set, name)
+      @redis.sadd @active_set, name
       
       publish({
         action: :add, 
@@ -53,8 +54,8 @@ module RedisAlerting
     end
 
     def remove_if_alert_exists(name, value, min, max)
-      return unless @redis.sismember(@config[:namespace], name)
-      @redis.srem @config[:namespace], name
+      return unless @redis.sismember(@active_set, name)
+      @redis.srem @active_set, name
       
       publish({
         action: :remove,
