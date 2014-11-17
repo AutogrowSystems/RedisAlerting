@@ -1,4 +1,4 @@
-Copyright (c) 2014 Robert McLeod
+Copyright (c) 2014 Autogrow Systems Limited
 
 MIT License
 
