@@ -24,7 +24,22 @@ module RedisAlerting
       yaml = YAML.load_file(@config[:config])
       @config.merge!(yaml["alerting"])
 
+      @config[:log_level] = parse_log_level
+
       raise ArgumentError, "Incomplete configuration" unless valid_config?
+    end
+
+    def parse_log_level
+      return Logger::UNKNOWN if @config[:log].nil? or @config[:log] == false
+      
+      case @config[:log]
+      when "error"
+        Logger::ERROR
+      when "debug"
+        Logger::DEBUG
+      else
+        Logger::INFO
+      end
     end
 
     # TODO: check we have all the needed options

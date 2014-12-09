@@ -29,6 +29,7 @@ Daemons.run_proc("redis_alerting", daemon_opts ) do
   opts = Slop.parse slop_args do
     on :c, :config=, 'Configuration File'
     on :p, :pwd=, "Working directory"
+    on :l, :log=, "Log at the specified level to stdout"
   end
 
   begin

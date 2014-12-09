@@ -1,10 +1,27 @@
 module RedisAlerting
   class Engine
-    def initialize(config, redis)
       @config = config
       @active_set = "#{@config[:namespace]}.active"
       @redis = redis
+    def initialize(config, redis, log)
+      @log        = log
       check_redis
+      @log.info "Redis Alerting Engine Initialized"
+      @log.info "Publishing alert information on channel: #{@config[:channel]}"
+      @log.info "Currently active alerts are in the key: #{@active_set}"
+
+      @log.info "Working with sources:"
+      @config[:sources].each do |name, source|
+        @log.info "  #{name}: #{source}"
+      end
+
+      @log.info "Working with extrema:"
+      @extrema.each do |name, ex|
+        @log.info "  #{name}:"
+        @log.info "    min: #{ex[:min]}"
+        @log.info "    max: #{ex[:max]}"
+      end
+
     end
 
     def run
@@ -15,6 +32,8 @@ module RedisAlerting
         min = @redis.get("#{ns}.#{name}.min").to_i
         max = @redis.get("#{ns}.#{name}.max").to_i
         value = @redis.get(source).to_i
+
+        @log.debug "Checking #{name} (min #{min}) (max #{max}): #{value}"
 
         # silently ignore
         next if max.nil? or min.nil? or value.nil?
@@ -42,6 +61,8 @@ module RedisAlerting
     def add_alert_for(name, condition, value, min, max)
       return if @redis.sismember(@active_set, name)
       @redis.sadd @active_set, name
+
+      @log.info "Added #{name} to active set"
       
       publish({
         action: :add, 
@@ -57,6 +78,9 @@ module RedisAlerting
       return unless @redis.sismember(@active_set, name)
       @redis.srem @active_set, name
       
+
+      @log.info "Removed #{name} from active set"
+
       publish({
         action: :remove,
         name: name,
@@ -68,7 +92,7 @@ module RedisAlerting
 
     def publish(message)
       @redis.publish @config[:channel], message.to_json
-      puts "pushed message: #{message.inspect}"
+      @log.info "Pushed message: #{message.inspect}"
     end
 
     def check_redis
