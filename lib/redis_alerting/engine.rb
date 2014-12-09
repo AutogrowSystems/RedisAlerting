@@ -62,8 +62,9 @@ module RedisAlerting
     end
 
     def add_alert_for(name, condition, value, min, max)
-      return if @redis.sismember(@active_set, name)
+      return if @redis.sismember(@active_set, name) and @redis.get(condition_key(name)) == condition.to_s
       @redis.sadd @active_set, name
+      @redis.set condition_key(name), condition
 
       @log.info "Added #{name} to active set"
       
@@ -80,7 +81,7 @@ module RedisAlerting
     def remove_if_alert_exists(name, value, min, max)
       return unless @redis.sismember(@active_set, name)
       @redis.srem @active_set, name
-      
+      @redis.set condition_key(name), "OK"
 
       @log.info "Removed #{name} from active set"
 
@@ -96,6 +97,10 @@ module RedisAlerting
     def publish(message)
       @redis.publish @config[:channel], message.to_json
       @log.info "Pushed message: #{message.inspect}"
+    end
+
+    def condition_key(name)
+      "#{@config[:namespace]}#{@config[:separator]}#{name}#{@config[:separator]}condition"
     end
 
     def check_redis
