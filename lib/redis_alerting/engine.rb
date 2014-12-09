@@ -1,11 +1,15 @@
 module RedisAlerting
   class Engine
-      @config = config
-      @active_set = "#{@config[:namespace]}.active"
-      @redis = redis
     def initialize(config, redis, log)
+      @config     = config
+      @active_set = "#{@config[:namespace]}#{@config[:separator]}active"
+      @redis      = redis
       @log        = log
+      @extrema    = {}
+
       check_redis
+      build_extrema
+
       @log.info "Redis Alerting Engine Initialized"
       @log.info "Publishing alert information on channel: #{@config[:channel]}"
       @log.info "Currently active alerts are in the key: #{@active_set}"
@@ -25,12 +29,11 @@ module RedisAlerting
     end
 
     def run
-      ns = @config[:namespace]
       @config[:sources].each do |name, source|
 
         # get the readings and alert ranges
-        min = @redis.get("#{ns}.#{name}.min").to_i
-        max = @redis.get("#{ns}.#{name}.max").to_i
+        min = @redis.get(@extrema[name][:min]).to_i
+        max = @redis.get(@extrema[name][:max]).to_i
         value = @redis.get(source).to_i
 
         @log.debug "Checking #{name} (min #{min}) (max #{max}): #{value}"
@@ -98,6 +101,15 @@ module RedisAlerting
     def check_redis
       raise ArgumentError, "Invalid Redis instance given" unless @redis.is_a? Redis
       raise ArgumentError, "Could not connect to Redis" unless @redis.ping == "PONG"
+    end
+
+    def build_extrema
+      @config[:sources].each do |source, redis_key|
+        @extrema[source] = {
+          min: @config[:extrema][:pattern].gsub("$source", source.to_s).gsub("$extrema", @config[:extrema][:min]),
+          max: @config[:extrema][:pattern].gsub("$source", source.to_s).gsub("$extrema", @config[:extrema][:max])
+        }
+      end
     end
   end
 end

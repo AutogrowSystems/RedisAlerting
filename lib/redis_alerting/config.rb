@@ -22,7 +22,7 @@ module RedisAlerting
       raise ArgumentError, "Invalid config file: #{@config[:config]}" unless File.exists? @config[:config]
       
       yaml = YAML.load_file(@config[:config])
-      @config.merge!(yaml["alerting"])
+      @config.merge!(yaml)
 
       @config[:log_level] = parse_log_level
 

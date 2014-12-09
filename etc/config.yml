@@ -1,9 +1,13 @@
 ---
-alerting:
-  :interval: 1
-  :namespace: alerts
-  :channel: alerts
-  :sources:
-    :ph: readings.ph
-    :ec: readings.ec
-    :flow: readings.flow
+:interval: 1
+:namespace: alerts
+:separator: .
+:channel: alerts
+:extrema:
+  :min: min
+  :max: max
+  :pattern: settings.$source_$extrema
+:sources:
+  :ph: readings.ph
+  :ec: readings.ec
+  :flow_rate: readings.flow_rate
