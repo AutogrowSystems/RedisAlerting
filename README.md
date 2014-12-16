@@ -57,6 +57,7 @@ Given the config file below we will describe how the gem would check some limits
 :namespace: alerts                     # the namespace to use for tracking active alerts/conditions
 :separator: .                          # redis namespace separator
 :channel: alerts                       # publish alert messages to this channel
+:faye_url: http://localhost/faye       # the URL of the Faye endpoint to publish to
 :extrema:                              # details for where to find extrema information
   :min: min                            # what you call your minimum
   :max: max                            # what you call your maximum
@@ -132,6 +133,21 @@ When an alert is no longer active, this message will be published:
   "max"    : 5.8
 }
 ```
+
+#### Publishing to Faye
+
+There is also support for publishing to a [Faye](http://faye.jcoglan.com/) URL.  Simply put the Faye URL in your config file like so:
+
+```yaml
+:faye_url: http://localhost/faye
+:channel: alerts
+```
+
+Or set it at command line:
+
+    $ redis-alerting run -- -c config.yml --faye-url http://localhost/faye
+
+This will disable publishing to redis.  The channel will automatically be set to `/alerts` if you leave out the leading slash.
 
 ### Simple example
 
