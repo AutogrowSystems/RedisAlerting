@@ -1,7 +1,8 @@
 module RedisAlerting
   class Engine
-    def initialize(config, redis, log)
+    def initialize(config, redis, log, publisher)
       @config     = config
+      @publisher  = publisher
       @active_set = "#{@config[:namespace]}#{@config[:separator]}active"
       @redis      = redis
       @log        = log
@@ -95,7 +96,7 @@ module RedisAlerting
     end
 
     def publish(message)
-      @redis.publish @config[:channel], message.to_json
+      @publisher.publish @config[:channel], message
       @log.info "Pushed message: #{message.inspect}"
     end
 
