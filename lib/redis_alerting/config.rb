@@ -19,6 +19,8 @@ module RedisAlerting
         @config[:config] = File.expand_path(@config[:config], @config[:pwd])
       end
 
+      @config[:faye_url] = @config[:"faye-url"] || @config[:faye_url]
+
       raise ArgumentError, "Invalid config file: #{@config[:config]}" unless File.exists? @config[:config]
       
       yaml = YAML.load_file(@config[:config])

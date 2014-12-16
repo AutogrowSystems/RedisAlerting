@@ -3,6 +3,7 @@
 :namespace: alerts
 :separator: .
 :channel: alerts
+:faye_url: http://localhost/faye
 :extrema:
   :min: min
   :max: max

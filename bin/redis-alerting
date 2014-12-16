@@ -30,6 +30,7 @@ Daemons.run_proc("redis_alerting", daemon_opts ) do
     on :c, :config=, 'Configuration File'
     on :p, :pwd=, "Working directory"
     on :l, :log=, "Log at the specified level to stdout"
+    on :"faye-url=", "The Faye URL to publish to"
   end
 
   begin
