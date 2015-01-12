@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "redis"
-  spec.add_dependency "slop"
+  spec.add_dependency "slop", '~> 3.6.0'
   spec.add_dependency "daemons"
 
   spec.add_development_dependency "bundler", "~> 1.7"
